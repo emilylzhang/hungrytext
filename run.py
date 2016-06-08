@@ -2,7 +2,7 @@ from flask import Flask, request, redirect
 import twilio.twiml
 import os
 # import googlemaps
-import geocoder
+# import geocoder
 
 # googlemaps key
 # it was here before i took it out
@@ -45,11 +45,11 @@ def hello():
         # print("geocode_result: " + geocode_result)
         # print("formatted address: " + geocode_result.formatted_address)
 
-    print("response" + str(resp))
+    print("response: " + str(resp))
     return str(resp)
 
 
 if __name__ == '__main__':
-    # Bind to PORT if PORT is defined, otherwise default to 5000.
+    # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
