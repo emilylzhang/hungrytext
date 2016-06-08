@@ -15,7 +15,7 @@ from twilio.rest import TwilioRestClient
 # from yelp.oauth1_authenticator import Oauth1Authenticator
 
 
-# client = Client(auth)
+client = Client(auth)
 
 # create a Flask app
 app = Flask(__name__)
