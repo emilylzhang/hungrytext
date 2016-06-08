@@ -34,14 +34,12 @@ def hello():
     # debugging info
     print("number: " + from_number)
     print("body: " + body)
-    print(1)
     resp.message("yo, this is what you wrote: " + body)
 
-    # Geocoding an address
-    print(2) # debugging info
-    geocode_result = geocoder.google(body)
-    print("geocode_result: " + geocode_result)
-    print("latitude and longitde: " +geocode_result.latlng)
+    # # Geocoding an address
+    # geocode_result = geocoder.google(body)
+    # print("geocode_result: " + geocode_result)
+    # print("latitude and longitde: " +geocode_result.latlng)
     # below is when i was using the google geocoding api -
         # geocode_result = gmaps.geocode(body)
         # print("geocode_result: " + geocode_result)
@@ -52,6 +50,6 @@ def hello():
 
 
 if __name__ == '__main__':
-    # Bind to PORT if defined, otherwise default to 5000.
+    # Bind to PORT if PORT is defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
