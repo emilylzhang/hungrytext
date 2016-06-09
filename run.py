@@ -2,13 +2,13 @@ from flask import Flask, request, redirect
 import twilio.twiml
 import os
 # import googlemaps
-# import geocoder
+import geocoder
 
 # googlemaps key
 # it was here before i took it out
 
 # Download the twilio-python library from http://twilio.com/docs/libraries
-from twilio.rest import TwilioRestClient
+# from twilio.rest import TwilioRestClient
 
 # create a client object to use Yelp API
 # from yelp.client import Client
@@ -21,7 +21,11 @@ from twilio.rest import TwilioRestClient
 app = Flask(__name__)
 
 # begin here
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['GET'])
+def kek():
+    return "READ THE FUCKING DOCUMENTATION U FUCKING SLUT"
+
+@app.route("/", methods=['POST'])
 def hello():
     """Respond to incoming calls with a simple text message."""
     resp = twilio.twiml.Response()
@@ -34,12 +38,16 @@ def hello():
     # debugging info
     print("number: " + from_number)
     print("body: " + body)
-    resp.message("yo, this is what you wrote: " + body)
 
     # # Geocoding an address
-    # geocode_result = geocoder.google(body)
+    geocode_result = geocoder.google(body)
     # print("geocode_result: " + geocode_result)
-    # print("latitude and longitde: " +geocode_result.latlng)
+    print(geocode_result.latlng)
+    lat = geocode_result.latlng[0]
+    lng = geocode_result.latlng[1]
+    latlng = str(geocode_result.latlng).strip('[]')
+
+    resp.message("yo, this is what you wrote: " + body +"\nAnd this is the latitude and longitude of the location you texted: (" +latlng +")")
     # below is when i was using the google geocoding api -
         # geocode_result = gmaps.geocode(body)
         # print("geocode_result: " + geocode_result)
@@ -52,4 +60,5 @@ def hello():
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = int(os.environ.get('PORT', 5000))
+    app.config.update(DEBUG=True)
     app.run(host='0.0.0.0', port=port)
