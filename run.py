@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, send_from_directory
 import twilio.twiml
 import os
 # import googlemaps
@@ -11,11 +11,17 @@ import geocoder
 # from twilio.rest import TwilioRestClient
 
 # create a client object to use Yelp API
-# from yelp.client import Client
-# from yelp.oauth1_authenticator import Oauth1Authenticator
+from yelp.client import Client
+from yelp.oauth1_authenticator import Oauth1Authenticator
 
+auth = Oauth1Authenticator(
+    consumer_key = os.getenv('YELP_CONSUMER_KEY'),
+    consumer_secret = os.getenv('YELP_CONSUMER_SECRET'),
+    token = os.getenv('YELP_YOUR_KEY'),
+    token_secret = os.getenv('YELP_YOUR_SECRET')
+)
 
-# client = Client(auth)
+client = Client(auth)
 
 # create a Flask app
 app = Flask(__name__)
@@ -55,6 +61,12 @@ def hello():
 
     print("response: " + str(resp))
     return str(resp)
+
+# handle favicon
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/png/vnd.microsoft.icon')
 
 
 if __name__ == '__main__':
