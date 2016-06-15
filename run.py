@@ -14,25 +14,21 @@ import geocoder
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 
-auth = Oauth1Authenticator(
-    consumer_key = os.getenv('YELP_CONSUMER_KEY'),
-    consumer_secret = os.getenv('YELP_CONSUMER_SECRET'),
-    token = os.getenv('YELP_YOUR_KEY'),
-    token_secret = os.getenv('YELP_YOUR_SECRET')
-)
-
-client = Client(auth)
-
 # create a Flask app
 app = Flask(__name__)
 
 # begin here
 @app.route("/", methods=['GET'])
 def kek():
-    return "READ THE FUCKING DOCUMENTATION U FUCKING SLUT"
+    return "READ THE FUCKING DOCUMENTATION U FUCKING SLUT AHHHHhhHH"
 
 @app.route("/", methods=['POST'])
 def hello():
+    print(os.getenv('YELP_CONSUMER_KEY'))
+    lat = 0
+    lng = 0
+    burgeraddr = 0
+
     """Respond to incoming calls with a simple text message."""
     resp = twilio.twiml.Response()
 
@@ -52,8 +48,39 @@ def hello():
     lat = geocode_result.latlng[0]
     lng = geocode_result.latlng[1]
     latlng = str(geocode_result.latlng).strip('[]')
+    print(0)
 
-    resp.message("yo, this is what you wrote: " + body +"\nAnd this is the latitude and longitude of the location you texted: (" +latlng +")")
+    if lat != 0 and lng != 0:
+        print(1)
+        auth = Oauth1Authenticator(
+            consumer_key=os.getenv('YELP_CONSUMER_KEY'),
+            consumer_secret=os.getenv('YELP_CONSUMER_SECRET'),
+            token=os.getenv('YELP_TOKEN_KEY'),
+            token_secret=os.getenv('YELP_TOKEN_SECRET')
+        )
+        print(2)
+        client = Client(auth)
+        print(3)
+        params = {
+            'term': 'In-N-Out Burger',
+            'lang': 'en',
+            'limit': 1,     # limit 1 business result
+            'sort': 0,      # sort by best match
+            'category_filter': 'burgers'
+        }
+        print(4)
+        burgerplace = client.search_by_coordinates(lat, lng, **params)
+        print(5)
+        burgeraddr = burgerplace.businesses[0].location.display_address
+        address = ""
+        while len(burgeraddr) != 0:
+            address = burgeraddr.pop() + ", " + address
+        address = address[0:len(address)-2]
+        print(address)
+
+    resp.message("yo, this is the location of the nearest In-N-Out: " +address)
+
+    # resp.message("yo, this is what you wrote: " +body +"\nAnd this is the latitude and longitude of the location you texted: (" +latlng +")\nAnd this is the address of the nearest In-N-Out: " +burgeraddr)
     # below is when i was using the google geocoding api -
         # geocode_result = gmaps.geocode(body)
         # print("geocode_result: " + geocode_result)
