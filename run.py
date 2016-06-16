@@ -40,7 +40,7 @@ app = Flask(__name__)
 # begin here
 @app.route("/", methods=['GET'])
 def kek():
-    return "READ THE FUCKING DOCUMENTATION AHHHHhhHH"
+    return "Yo, you should try texting (669) 600-5660"
 
 @app.route("/", methods=['POST'])
 def hello():
